@@ -176,29 +176,29 @@ export const getSuggestedUser = async (req, res) => {
   }
 };
 
-export const followOrUnfollow = async (req, res) => {
-  try {
-    const followKarneWala = req.id;
-    const jiskoFollowKarunga = req.params.id;
+// export const followOrUnfollow = async (req, res) => {
+//   try {
+//     const followKarneWala = req.id;
+//     const jiskoFollowKarunga = req.params.id;
 
-    if (followKarneWala === jiskoFollowKarunga) {
-      return res.status(400).json({
-        message: "you cannot follow / unfollow by yourself",
-        success: false,
-      });
-    }
-    const user = await User.findById(followKarneWala);
-    const target = await User.findById(jiskoFollowKarunga);
-    if (!user || !target) {
-      return res.status(400).json({
-        messsage: "user not found",
-        success: false,
-      });
-    }
+//     if (followKarneWala === jiskoFollowKarunga) {
+//       return res.status(400).json({
+//         message: "you cannot follow / unfollow by yourself",
+//         success: false,
+//       });
+//     }
+//     const user = await User.findById(followKarneWala);
+//     const target = await User.findById(jiskoFollowKarunga);
+//     if (!user || !target) {
+//       return res.status(400).json({
+//         messsage: "user not found",
+//         success: false,
+//       });
+//     }
 
-    //main check karunga ki follow karna hai ya unfollow karna hai;---------
-    nbccnhgfghd;
-  } catch (error) {
-    console.log(error);
-  }
-};
+//     //main check karunga ki follow karna hai ya unfollow karna hai;---------
+
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
