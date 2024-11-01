@@ -1,4 +1,4 @@
-import { User } from "../models/user.model.js";
+import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import getDataUri from "../utils/dataUri.js";
@@ -110,7 +110,7 @@ export const logOut = async (req, res) => {
 export const getProfile = async (req, res) => {
   try {
     const userId = req.params.id;
-    let user = await User.findById(userId);
+    let user = await User.findById(userId).select("-password");
 
     return res.status(200).json({
       user,
@@ -132,7 +132,7 @@ export const editProfile = async (req, res) => {
       const fileUri = getDataUri(profilePicture);
       cloudResponse = await cloudinary.uploader.upload(fileUri);
     }
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).select("-password");
     if (!user) {
       return res.status(404).json({
         message: "User not found",
@@ -157,9 +157,9 @@ export const editProfile = async (req, res) => {
 
 export const getSuggestedUser = async (req, res) => {
   try {
-    const suggestedUser = await User.find({ _id: { $ne: req.id } }).select(
-      "-password"
-    );
+    const suggestedUser = await User.find({
+      _id: { $ne: req.id },
+    }).select("-password");
 
     if (!suggestedUser) {
       return res.status(400).json({

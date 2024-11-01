@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import connectDB from "./utils/db.js";
 dotenv.config({});
+import userRoute from "./routes/user.routes.js";
 
 const app = express();
 
@@ -27,6 +28,9 @@ const corsOption = {
 };
 
 app.use(cors(corsOption));
+
+//yaha par api ayenge------------------
+app.use("/api/v1/user", userRoute);
 
 app.listen(PORT, () => {
   connectDB();
