@@ -178,8 +178,8 @@ export const getSuggestedUser = async (req, res) => {
 
 export const followOrUnfollow = async (req, res) => {
   try {
-    const followKarneWala = req.id;
-    const jiskoFollowKarunga = req.params.id;
+    const followKarneWala = req.id; //patel
+    const jiskoFollowKarunga = req.params.id; //shivani
 
     if (followKarneWala === jiskoFollowKarunga) {
       return res.status(400).json({
@@ -197,6 +197,38 @@ export const followOrUnfollow = async (req, res) => {
     }
 
     //main check karunga ki follow karna hai ya unfollow karna hai;---------
+    const isFollowing = user.following.includes(jiskoFollowKarunga);
+    if (isFollowing) {
+      //unfollow karunga
+      await Promise.all([
+        User.updateOne(
+          { _id: followKarneWala },
+          { $pull: { following: jiskoFollowKarunga } }
+        ),
+        User.updateOne(
+          { _id: jiskoFollowKarunga },
+          { $pull: { followers: followKarneWala } }
+        ),
+      ]);
+      return res
+        .status(200)
+        .json({ message: "Unfollowed successfully ", success: true });
+    } else {
+      // follow karunga
+      await Promise.all([
+        User.updateOne(
+          { _id: followKarneWala },
+          { $push: { following: jiskoFollowKarunga } }
+        ),
+        User.updateOne(
+          { _id: jiskoFollowKarunga },
+          { $push: { followers: followKarneWala } }
+        ),
+      ]);
+      return res
+        .status(200)
+        .json({ message: "Followed successfully ", success: true });
+    }
   } catch (error) {
     console.log(error);
   }
