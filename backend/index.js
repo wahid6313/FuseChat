@@ -12,12 +12,12 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-app.get("/", (_, res) => {
-  return res.status(200).json({
-    message: "i am coming from backened",
-    success: true,
-  });
-});
+// app.get("/", (_, res) => {
+//   return res.status(200).json({
+//     message: "i am coming from backened",
+//     success: true,
+//   });
+// });
 
 //middleware
 app.use(express.json());
@@ -25,7 +25,7 @@ app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 
 const corsOption = {
-  origin: "http://localhost:5173",
+  origin: " http://localhost:5173",
   Credentials: true,
 };
 

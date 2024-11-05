@@ -6,11 +6,10 @@ import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 
-const Signup = () => {
+const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [input, setInput] = useState({
-    userName: "",
     email: "",
     password: "",
   });
@@ -26,7 +25,7 @@ const Signup = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "http://localhost:8000/api/v1/user/register",
+        "http://localhost:8000/api/v1/user/login",
         input,
         {
           headers: {
@@ -36,10 +35,9 @@ const Signup = () => {
         }
       );
       if (res.data.success) {
-        navigate("/login");
+        navigate("/");
         toast.success(res.data.message);
         setInput({
-          userName: "",
           email: "",
           password: "",
         });
@@ -61,19 +59,10 @@ const Signup = () => {
         <div className="items-center text-center">
           <h1 className="font-bold text-xl">Form</h1>
           <p className="mt-2 mb-5">
-            Signup to see photos & videos of your freinds
+            Login to see photos & videos of your freinds
           </p>
         </div>
-        <div>
-          <span>Username</span>
-          <Input
-            type="text"
-            name="userName"
-            value={input.userName}
-            onChange={changeEventHandler}
-            className="focus-visible:ring-transparent mt-2"
-          />
-        </div>
+
         <div>
           <span>Email</span>
           <Input
@@ -101,13 +90,13 @@ const Signup = () => {
           </Button>
         ) : (
           <Button type="submit" className="mt-3">
-            Signup
+            Login
           </Button>
         )}
         <span className="text-center">
-          Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 ml-1">
-            Login
+          Doesn't have a acount?
+          <Link to="/signup" className="text-blue-600 ml-2">
+            Signup
           </Link>
         </span>
       </form>
@@ -115,4 +104,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Login;
