@@ -59,8 +59,8 @@ const Signup = () => {
         className="shadow-xl flex flex-col p-8 gap-5 w-"
       >
         <div className="items-center text-center">
-          <h1 className="font-bold text-xl">Form</h1>
-          <p className="mt-2 mb-5">
+          <h1 className="font-bold text-xl">FuseChat</h1>
+          <p className="mt-2 mb-5 font-light">
             Signup to see photos & videos of your freinds
           </p>
         </div>
