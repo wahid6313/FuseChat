@@ -26,6 +26,10 @@ function Post() {
     }
   };
 
+  const sendMessageHandler = async () => {
+    alert(text);
+  };
+
   return (
     <div className="mt-1 w-full max-w-sm mx-auto ">
       {/* post header ----------------------------------------------------------------- */}
@@ -39,7 +43,7 @@ function Post() {
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <h1 className="cursor-pointer font-semibold ">username</h1>
-          <div className="flex justify-end items-center text-center ml-[225px] ">
+          <div className="flex justify-end items-center text-center ml-[220px] ">
             <Dialog>
               <DialogTrigger asChild>
                 <MoreHorizontal className="cursor-pointer ml-2 justify-end"></MoreHorizontal>
@@ -55,7 +59,7 @@ function Post() {
                   variant="ghost"
                   className="bg-white text-blue-600 border border-none  w-full"
                 >
-                  Add to favourites
+                  Add to favorites
                 </Button>
                 <Button
                   variant="ghost"
@@ -74,7 +78,7 @@ function Post() {
         <img
           className="object-cover rounded-lg w-full mb-2 "
           alt="post-img"
-          src="https://images.unsplash.com/photo-1659030202270-89739a152d52?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          src="https://images.unsplash.com/photo-1574129214345-65fe1d421c30?q=80&w=3115&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         />
       </div>
 
@@ -117,7 +121,10 @@ function Post() {
           className="outline-none  w-full text-sm"
         />
         {text && (
-          <span className="text-[#3BADF8] text-sm font-semibold cursor-pointer">
+          <span
+            onClick={sendMessageHandler}
+            className="text-[#3BADF8] text-sm font-semibold cursor-pointer"
+          >
             Post
           </span>
         )}
