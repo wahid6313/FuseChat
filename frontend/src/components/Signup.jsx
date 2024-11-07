@@ -106,7 +106,7 @@ const Signup = () => {
         )}
         <span className="text-center">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 ml-1">
+          <Link to="/login" className="text-blue-600 ml-1 hover:underline">
             Login
           </Link>
         </span>

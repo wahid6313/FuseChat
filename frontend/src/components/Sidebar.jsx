@@ -71,7 +71,7 @@ function Sidebar() {
             src="https://t4.ftcdn.net/jpg/03/02/16/77/360_F_302167753_zO96cQJziw0BYKOSw0plniVSlkxdGTC5.jpg"
             className="mr-2"
           />
-          <h2 className="text-xl font-semibold">FuseChat</h2>
+          <span className="text-xl font-semibold">FuseChat</span>
         </h1>
 
         {/* Main Sidebar Items */}

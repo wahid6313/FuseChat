@@ -1,6 +1,6 @@
-import { createSlide } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-const authSlice = createSlide({
+const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: null,
