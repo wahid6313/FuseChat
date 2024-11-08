@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
   AlignJustify,
@@ -14,42 +14,22 @@ import {
 import { toast } from "sonner";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-const sidebarItems = [
-  { icons: <Home />, text: "Home" },
-  { icons: <Search />, text: "Search" },
-  { icons: <TrendingUp />, text: "Explore" },
-  { icons: <MessageCircle />, text: "Messages" },
-  { icons: <Heart />, text: "Notifications" },
-  { icons: <PlusSquare />, text: "Create" },
-  {
-    icons: (
-      <Avatar className="w-7 h-7">
-        <AvatarImage
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSbtzZWVSpzn3sKP5TfWHzwIiS-2kI_mA8gNWtj5uVm-dpaGKnmdVMNDNd_thd-PzENpU&usqp=CAU"
-          alt="@shadcn"
-        />
-        <AvatarFallback>CN</AvatarFallback>
-      </Avatar>
-    ),
-    text: "Profile",
-  },
-  { icons: <LogOut />, text: "LogOut" },
-];
-
-const bottomItems = [
-  { icons: <AtSign />, text: "Threads" },
-  { icons: <AlignJustify />, text: "More" },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { setAuthUser } from "@/redux/authSlice";
+import CreatePost from "./CreatePost.jsx";
 
 function Sidebar() {
   const navigate = useNavigate();
+  const { user } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
   const logoutHandler = async () => {
     try {
       const res = await axios("http://localhost:8000/api/v1/user/logOut", {
         withCredentials: false,
       });
       if (res.data.success) {
+        dispatch(setAuthUser(null));
         navigate("/login");
         toast.success(res.data.message);
       }
@@ -58,8 +38,36 @@ function Sidebar() {
     }
   };
   const sidebarHandler = (textType) => {
-    if (textType === "LogOut") logoutHandler();
+    if (textType === "LogOut") {
+      logoutHandler();
+    } else if (textType === "Create") {
+      setOpen(true);
+    }
   };
+
+  const sidebarItems = [
+    { icons: <Home />, text: "Home" },
+    { icons: <Search />, text: "Search" },
+    { icons: <TrendingUp />, text: "Explore" },
+    { icons: <MessageCircle />, text: "Messages" },
+    { icons: <Heart />, text: "Notifications" },
+    { icons: <PlusSquare />, text: "Create" },
+    {
+      icons: (
+        <Avatar className="w-7 h-7">
+          <AvatarImage src={user?.profilePicture} alt="@shadcn" />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+      ),
+      text: "Profile",
+    },
+    { icons: <LogOut />, text: "LogOut" },
+  ];
+
+  const bottomItems = [
+    { icons: <AtSign />, text: "Threads" },
+    { icons: <AlignJustify />, text: "More" },
+  ];
 
   return (
     <div className="fixed top-0 z-10 left-0 px-3 border-r border-gray-300 w-[245px] h-screen flex flex-col justify-between">
@@ -102,6 +110,7 @@ function Sidebar() {
           </div>
         ))}
       </div>
+      <CreatePost open={open} setOpen={setOpen} />
     </div>
   );
 }

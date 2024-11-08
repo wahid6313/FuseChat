@@ -5,10 +5,13 @@ import axios from "axios";
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
+import { setAuthUser } from "../redux/authSlice.js";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [input, setInput] = useState({
     email: "",
     password: "",
@@ -35,6 +38,7 @@ const Login = () => {
         }
       );
       if (res.data.success) {
+        dispatch(setAuthUser(res.data.user));
         navigate("/");
         toast.success(res.data.message);
         setInput({

@@ -10,7 +10,7 @@ export const addNewPost = async (req, res) => {
     const image = req.file;
     const authorId = req.id;
 
-    if (image) {
+    if (!image) {
       res.status(400).json({ message: "image required" });
     }
 
@@ -28,7 +28,7 @@ export const addNewPost = async (req, res) => {
     const post = await Post.create({
       caption,
       image: cloudResponse.secure_url,
-      auhtor: authorId,
+      author: authorId,
     });
 
     const user = await User.findById(authorId);
@@ -38,7 +38,7 @@ export const addNewPost = async (req, res) => {
       await user.save();
     }
 
-    await post.populate({ path: "auhtor", select: "-password" });
+    await post.populate({ path: "author", select: "-password" });
 
     return res.status(201).json({
       message: "New Post Added",
@@ -54,7 +54,7 @@ export const getAllPost = async (req, res) => {
   try {
     const posts = await Post.find()
       .sort({ createdAt: -1 })
-      .populate({ path: "auhtor", select: "userName, profilePicture" })
+      .populate({ path: "author", select: "userName, profilePicture" })
       .populate({
         path: "comment",
         sort: { createdAt: -1 },

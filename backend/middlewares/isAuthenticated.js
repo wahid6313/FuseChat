@@ -23,5 +23,17 @@ const isAuthenticated = async (req, res, next) => {
     console.log(error);
   }
 };
+// const isAuthenticated = (req, res, next) => {
+//   const token = req.headers.authorization?.split(" ")[1];
+//   if (!token) return res.status(401).json({ message: "User not authorized" });
+
+//   try {
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//     req.id = decoded.userId; // Attach user ID to request
+//     next();
+//   } catch (error) {
+//     res.status(403).json({ message: "Token is invalid" });
+//   }
+// };
 
 export default isAuthenticated;
