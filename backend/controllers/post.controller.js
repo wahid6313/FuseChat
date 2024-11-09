@@ -1,4 +1,5 @@
 import sharp from "sharp";
+import fs from "fs-extra";
 import cloudinary from "../utils/cloudinary.js";
 import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
@@ -11,20 +12,26 @@ export const addNewPost = async (req, res) => {
     const authorId = req.id;
 
     if (!image) {
-      res.status(400).json({ message: "image required" });
+      return res.status(400).json({ message: "Image is required" });
     }
 
-    //image upload--------------
+    // Optimize image using sharp
     const optimizedImageBuffer = await sharp(image.buffer)
       .resize({ width: 800, height: 800, fit: "inside" })
       .toFormat("jpeg", { quality: 80 })
       .toBuffer();
 
-    //buffer to data uri-------
-    const fileUri = `data:image/jpeg;base64, ${optimizedImageBuffer.toString(
-      "base64"
-    )}`;
-    const cloudResponse = await cloudinary.uploader.upload(fileUri);
+    // Save optimized image as a temporary file
+    const tempFilePath = `./temp/${Date.now()}-optimized-image.jpeg`;
+    await fs.outputFile(tempFilePath, optimizedImageBuffer);
+
+    // Upload the file to Cloudinary
+    const cloudResponse = await cloudinary.uploader.upload(tempFilePath);
+
+    // Remove the temporary file after upload
+    await fs.remove(tempFilePath);
+
+    // Create the post in the database
     const post = await Post.create({
       caption,
       image: cloudResponse.secure_url,
@@ -32,7 +39,6 @@ export const addNewPost = async (req, res) => {
     });
 
     const user = await User.findById(authorId);
-
     if (user) {
       user.posts.push(post._id);
       await user.save();
@@ -46,10 +52,10 @@ export const addNewPost = async (req, res) => {
       success: true,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).json({ message: "Server error", error });
   }
 };
-
 export const getAllPost = async (req, res) => {
   try {
     const posts = await Post.find()
@@ -76,7 +82,7 @@ export const getAllPost = async (req, res) => {
 export const getUserPost = async (req, res) => {
   try {
     const authorId = req.id;
-    const posts = await Post.find({ auhtor: authorId })
+    const posts = await Post.find({ author: authorId })
       .sort({ createdAt: -1 })
       .populate({
         path: "author",
@@ -163,7 +169,7 @@ export const addComment = async (req, res) => {
 
     const post = await Post.findById(postId);
 
-    if (!post) {
+    if (!text) {
       return res.status(404).json({
         message: "Text is required",
         success: false,
@@ -171,9 +177,13 @@ export const addComment = async (req, res) => {
     }
     const comment = await Comment.create({
       text,
-      auhtor: commentKarneWalaUserKiId,
+      author: commentKarneWalaUserKiId,
       post: postId,
-    }).populate({ path: "auhtor", select: "userName, profilePicture" });
+    });
+    await comment.populate({
+      path: "author",
+      select: "userName, profilePicture",
+    });
 
     post.comment.push(comment._id);
     await post.save();
@@ -218,7 +228,7 @@ export const deletePost = async (req, res) => {
     const postId = req.params.id;
     const authorId = req.id;
 
-    const post = await Post.find(postId);
+    const post = await Post.findById(postId);
     if (!post) {
       return res.status(404).json({
         message: "No post Found",
@@ -228,7 +238,7 @@ export const deletePost = async (req, res) => {
 
     //check if the loged in user is the owner of the post-----
 
-    if (post.auhtor.toString() != authorId) {
+    if (post.author.toString() !== authorId) {
       return res.status(403).json({
         message: "You are not auhtorized to delete this post",
         success: false,
@@ -240,8 +250,8 @@ export const deletePost = async (req, res) => {
 
     //remove the post id from user post----
 
-    let user = await Post.findById(authorId);
-    user.posts = user.posts.filter((id) => id.toString() != postId);
+    let user = await User.findById(authorId);
+    user.posts = user.posts.filter((id) => id.toString() !== postId);
     await user.save();
 
     //delete associated comments------
@@ -269,7 +279,7 @@ export const bookmarkPost = async (req, res) => {
       });
     }
 
-    const user = await Post.findById(authorId);
+    const user = await User.findById(authorId);
     if (user.bookmarks.includes(post._id)) {
       //already bookes so removed from bookmarks--------
       await user.updateOne({ $pull: { bookmarks: post._id } });

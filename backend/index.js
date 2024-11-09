@@ -3,21 +3,25 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import connectDB from "./utils/db.js";
-dotenv.config({});
 import userRoute from "./routes/user.routes.js";
 import postRoute from "./routes/post.route.js";
 import messageRoute from "./routes/message.route.js";
+import path from "path";
+
+dotenv.config({});
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-app.get("/", (_, res) => {
-  return res.status(200).json({
-    message: "i am coming from backened",
-    success: true,
-  });
-});
+const __dirname = path.resolve();
+
+// app.get("/", (_, res) => {
+//   return res.status(200).json({
+//     message: "i am coming from backened",
+//     success: true,
+//   });
+// });
 
 //middleware
 app.use(express.json());
