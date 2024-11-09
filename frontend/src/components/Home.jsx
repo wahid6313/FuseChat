@@ -5,7 +5,7 @@ import RightSidebar from "./RightSidebar";
 import useGetAllPost from "../hooks/useGetAllPost.jsx";
 
 function Home() {
-  // useGetAllPost();
+  useGetAllPost();
   return (
     <div className="flex ">
       <div className="flex-grow ">

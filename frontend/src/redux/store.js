@@ -20,7 +20,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   auth: authSlice,
-  // post: postSlice,
+  post: postSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

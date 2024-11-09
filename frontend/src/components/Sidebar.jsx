@@ -26,7 +26,7 @@ function Sidebar() {
   const logoutHandler = async () => {
     try {
       const res = await axios("http://localhost:8000/api/v1/user/logOut", {
-        withCredentials: false,
+        withCredentials: true,
       });
       if (res.data.success) {
         dispatch(setAuthUser(null));

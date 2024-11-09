@@ -7,13 +7,14 @@ import { Button } from "./ui/button";
 import { readFileAsDataUrl } from "../lib/utils";
 import { toast } from "sonner";
 import axios from "axios";
+import { Loader2 } from "lucide-react";
 
 function CreatePost({ open, setOpen }) {
   const imageRef = useRef();
   const [file, setFile] = useState("");
   const [caption, setCaption] = useState("");
   const [imagePreview, setImagePreview] = useState("");
-  //   const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const fileChangeHandler = async (e) => {
     const file = e.target.files?.[0];
@@ -32,17 +33,16 @@ function CreatePost({ open, setOpen }) {
     if (imagePreview) formData.append("image", file);
 
     try {
-      //   setLoading(true);
-      const token = localStorage.getItem("authToken");
+      setLoading(true);
+      // const token = localStorage.getItem("authToken");
       const res = await axios.post(
         "http://localhost:8000/api/v1/post/addpost",
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            // Authorization: `Bearer ${token}`,
           },
-          withCredentials: false,
+          withCredentials: true,
         }
       );
       if (res.data.success) {
@@ -53,7 +53,7 @@ function CreatePost({ open, setOpen }) {
 
       toast.error(error.response.data.message);
     } finally {
-      //   setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -104,15 +104,21 @@ function CreatePost({ open, setOpen }) {
           >
             Select from computer
           </Button>
-          {imagePreview && (
-            <Button
-              type="submit"
-              onClick={createPostHandler}
-              className="bg-white shadow-lg text-blue-600 hover:bg-blue-500 hover:text-white w-fit h-8  mt-5"
-            >
-              Post
-            </Button>
-          )}
+          {imagePreview &&
+            (loading ? (
+              <Button className="mt-5 bg-blue-500 hover:bg-blue-500">
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                onClick={createPostHandler}
+                className="bg-white shadow-lg text-blue-600 hover:bg-blue-500 hover:text-white w-fit h-8  mt-5"
+              >
+                Post
+              </Button>
+            ))}
         </div>
       </DialogContent>
     </Dialog>
