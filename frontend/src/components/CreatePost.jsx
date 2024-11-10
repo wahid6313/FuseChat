@@ -8,6 +8,8 @@ import { readFileAsDataUrl } from "../lib/utils";
 import { toast } from "sonner";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { setPosts } from "@/redux/postSlice";
 
 function CreatePost({ open, setOpen }) {
   const imageRef = useRef();
@@ -15,6 +17,9 @@ function CreatePost({ open, setOpen }) {
   const [caption, setCaption] = useState("");
   const [imagePreview, setImagePreview] = useState("");
   const [loading, setLoading] = useState(false);
+  const { user } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
+  const { posts } = useSelector((store) => store.post);
 
   const fileChangeHandler = async (e) => {
     const file = e.target.files?.[0];
@@ -46,7 +51,9 @@ function CreatePost({ open, setOpen }) {
         }
       );
       if (res.data.success) {
+        dispatch(setPosts([res.data.post, ...posts]));
         toast.success(res.data.message);
+        setOpen(false);
       }
     } catch (error) {
       console.log(error.message);
@@ -65,14 +72,13 @@ function CreatePost({ open, setOpen }) {
         </DialogHeader>
         <div className="flex items-center gap-2">
           <Avatar>
-            <AvatarImage
-              src="https://photosking.net/wp-content/uploads/beautiful-girls-dp_116.webp"
-              alt="img"
-            />
+            <AvatarImage src={user?.profilePicture} alt="img" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div>
-            <h1 className="font-semibold text-sm cursor-pointer">Username</h1>
+            <h1 className="font-semibold text-sm cursor-pointer">
+              {user?.userName}
+            </h1>
             <span className="text-sm text-gray-400">Bio here...</span>
           </div>
         </div>

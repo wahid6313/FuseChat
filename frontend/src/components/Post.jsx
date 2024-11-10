@@ -12,10 +12,35 @@ import {
 } from "lucide-react";
 import { Button } from "./ui/button";
 import CommentDialog from "./CommentDialog";
+import { useSelector } from "react-redux";
+import { toast } from "sonner";
+import axios from "axios";
 
-function Post() {
+function Post({ post }) {
   const [text, setText] = useState("");
   const [open, setOpen] = useState(false);
+
+  // console.log(post);
+  const { userName } = post.author[0];
+  const { profilePicture } = post.author[0];
+  const { user } = useSelector((store) => store.auth);
+
+  const deletePost = async () => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:8000/api/v1/post/delete/${post?._id}`,
+        { withCredentials: true }
+      );
+      if (res.data.success) {
+        toast.success(res.data.message);
+        setOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
+
+      toast.error(error.response.data.message);
+    }
+  };
 
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
@@ -31,18 +56,15 @@ function Post() {
   };
 
   return (
-    <div className="mt-1 w-full max-w-sm mx-auto ">
+    <div className="mt-1 w-full items-start max-w-sm mx-auto ">
       {/* post header ----------------------------------------------------------------- */}
       <div className=" items-center justify-between">
         <div className=" flex items-center text-center justify-start gap-2 pt-4 pb-3 ">
           <Avatar className="cursor-pointer ">
-            <AvatarImage
-              alt="post-image"
-              src="https://photosking.net/wp-content/uploads/beautiful-girls-dp_116.webp"
-            ></AvatarImage>
+            <AvatarImage alt="post-image" src={profilePicture}></AvatarImage>
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-          <h1 className="cursor-pointer font-semibold ">username</h1>
+          <h1 className="cursor-pointer font-semibold">{userName}</h1>
           <div className="flex justify-end items-center text-center ml-[220px] ">
             <Dialog>
               <DialogTrigger asChild>
@@ -61,12 +83,15 @@ function Post() {
                 >
                   Add to favorites
                 </Button>
-                <Button
-                  variant="ghost"
-                  className="bg-white text-blue-600 border border-none  w-full"
-                >
-                  Delete
-                </Button>
+                {user && post.author[0] && user._id === post.author[0]._id && (
+                  <Button
+                    onClick={deletePost}
+                    variant="ghost"
+                    className="bg-white text-blue-600 border border-none  w-full"
+                  >
+                    Delete
+                  </Button>
+                )}
               </DialogContent>
             </Dialog>
           </div>
@@ -78,7 +103,7 @@ function Post() {
         <img
           className="object-cover rounded-lg w-full mb-2 "
           alt="post-img"
-          src="https://images.unsplash.com/photo-1574129214345-65fe1d421c30?q=80&w=3115&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          src={post.image}
         />
       </div>
 
@@ -96,12 +121,12 @@ function Post() {
       </div>
       <div className=" flex items-start">
         <span className="font-semibold text-sm mt-3 cursor-pointer">
-          14,300 likes
+          {post.likes.length} likes
         </span>
       </div>
-      <div className=" flex items-start text-sm gap-2 mt-1">
-        <span className="font-semibold cursor-pointer">Username</span>
-        Caption
+      <div className="text-sm  mt-1 text-left">
+        <span className="font-semibold cursor-pointer inline">{userName}</span>
+        <span className="inline w-full ml-1"> {post.caption}</span>
       </div>
       <span
         onClick={() => setOpen(true)}

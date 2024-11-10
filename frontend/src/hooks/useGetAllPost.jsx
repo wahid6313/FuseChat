@@ -12,9 +12,9 @@ const useGetAllPost = () => {
           withCredentials: true,
         });
         if (res.data.success) {
-          console.log(res.data);
+          // console.log(res.data);
 
-          //   dispatch(setPosts(res.data.posts));
+          dispatch(setPosts(res.data.posts));
         }
       } catch (error) {
         console.log(error);
