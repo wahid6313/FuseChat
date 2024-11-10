@@ -12,9 +12,10 @@ import {
 } from "lucide-react";
 import { Button } from "./ui/button";
 import CommentDialog from "./CommentDialog";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import axios from "axios";
+import { setPosts } from "@/redux/postSlice";
 
 function Post({ post }) {
   const [text, setText] = useState("");
@@ -24,14 +25,54 @@ function Post({ post }) {
   const { userName } = post.author[0];
   const { profilePicture } = post.author[0];
   const { user } = useSelector((store) => store.auth);
+  const { posts } = useSelector((store) => store.post);
+  const [liked, setLiked] = useState(post.likes.includes(user?._id) || false);
+  const [postLike, setPostLike] = useState(post.likes.length);
+  const dispatch = useDispatch();
 
-  const deletePost = async () => {
+  const likeOrDislikeHandler = async () => {
+    try {
+      const action = liked ? "dislike" : "like";
+      const res = await axios.get(
+        `http://localhost:8000/api/v1/post/${post._id}/${action}`,
+        { withCredentials: true }
+      );
+      if (res.data.success) {
+        const updateLikes = liked ? postLike - 1 : postLike + 1;
+        setPostLike(updateLikes);
+        setLiked(!liked);
+
+        //post ko update karne ke liye--------
+        const updatedPostData = posts.map((p) =>
+          p._id === post._id
+            ? {
+                ...p,
+                likes: liked
+                  ? p.likes.filter((id) => id !== user._id)
+                  : [...p.likes, user._id],
+              }
+            : p
+        );
+        dispatch(setPosts(updatedPostData));
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
+
+  const deletePostHandler = async () => {
     try {
       const res = await axios.delete(
         `http://localhost:8000/api/v1/post/delete/${post?._id}`,
         { withCredentials: true }
       );
       if (res.data.success) {
+        const updateDeletePost = posts.filter(
+          (postItem) => postItem?._id !== post?._id
+        );
+        dispatch(setPosts(updateDeletePost));
         toast.success(res.data.message);
         setOpen(false);
       }
@@ -85,7 +126,7 @@ function Post({ post }) {
                 </Button>
                 {user && post.author[0] && user._id === post.author[0]._id && (
                   <Button
-                    onClick={deletePost}
+                    onClick={deletePostHandler}
                     variant="ghost"
                     className="bg-white text-blue-600 border border-none  w-full"
                   >
@@ -110,7 +151,19 @@ function Post({ post }) {
       {/* post likes , comments , share ------------------------------------------------------------- */}
       <div className="flex items-center justify-between">
         <div className="flex gap-4 items-center text-center mt-1 cursor-pointer ">
-          <FaRegHeart className="w-6 h-6 hover:text-gray-400" />
+          {liked ? (
+            <FaHeart
+              onClick={likeOrDislikeHandler}
+              size={"24"}
+              className="cursor-pointer text-red-500 "
+            />
+          ) : (
+            <FaRegHeart
+              onClick={likeOrDislikeHandler}
+              className="w-6 h-6 hover:text-gray-400"
+            />
+          )}
+
           <MessageCircle
             onClick={() => setOpen(true)}
             className="hover:text-gray-400"
@@ -121,7 +174,7 @@ function Post({ post }) {
       </div>
       <div className=" flex items-start">
         <span className="font-semibold text-sm mt-3 cursor-pointer">
-          {post.likes.length} likes
+          {postLike} likes
         </span>
       </div>
       <div className="text-sm  mt-1 text-left">

@@ -21,7 +21,7 @@ router
 router.route("/all").get(isAuthenticated, getAllPost);
 router.route("/userPost/all").get(isAuthenticated, getUserPost);
 router.route("/:id/like").get(isAuthenticated, likePost);
-router.route("/:id/disLike").get(isAuthenticated, disLikePost);
+router.route("/:id/dislike").get(isAuthenticated, disLikePost);
 router.route("/:id/comment").post(isAuthenticated, addComment);
 router.route("/:id/Comment/all").get(isAuthenticated, getCommentOfPost);
 router.route("/delete/:id").delete(isAuthenticated, deletePost);
