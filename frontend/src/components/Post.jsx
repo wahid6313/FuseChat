@@ -170,6 +170,7 @@ function Post({ post }) {
           />
           <Send className="hover:text-gray-400" />
         </div>
+
         <Bookmark className="hover:text-gray-400" />
       </div>
       <div className=" flex items-start">
