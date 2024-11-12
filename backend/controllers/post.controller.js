@@ -167,25 +167,27 @@ export const addComment = async (req, res) => {
     const commentKarneWalaUserKiId = req.id;
     const { text } = req.body;
 
-    const post = await Post.findById(postId);
-
     if (!text) {
       return res.status(404).json({
         message: "Text is required",
         success: false,
       });
     }
+
+    const post = await Post.findById(postId);
+
     const comment = await Comment.create({
       text,
       author: commentKarneWalaUserKiId,
       post: postId,
     });
+
     await comment.populate({
       path: "author",
       select: "userName profilePicture",
     });
 
-    post.comment.push(comment._id);
+    post.comments.push(comment._id);
     await post.save();
 
     return res.status(200).json({

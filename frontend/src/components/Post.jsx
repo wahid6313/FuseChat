@@ -28,7 +28,38 @@ function Post({ post }) {
   const { posts } = useSelector((store) => store.post);
   const [liked, setLiked] = useState(post.likes.includes(user?._id) || false);
   const [postLike, setPostLike] = useState(post.likes.length);
+  const [comment, setcomment] = useState(post.comments || []);
   const dispatch = useDispatch();
+
+  const commentHandler = async () => {
+    try {
+      const res = await axios.post(
+        `http://localhost:8000/api/v1/post/${post._id}/comment`,
+        { text },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      console.log(res.data);
+
+      if (res.data.success) {
+        const updatedCommentData = [...comment, res.data.comment];
+        setcomment(updatedCommentData);
+
+        const updatedPostData = posts.map((p) =>
+          p._id === post._id ? { ...p, comments: updatedCommentData } : p
+        );
+        dispatch(setPosts(updatedPostData));
+        toast.success(res.data.message);
+        setText("");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const likeOrDislikeHandler = async () => {
     try {
@@ -186,7 +217,7 @@ function Post({ post }) {
         onClick={() => setOpen(true)}
         className=" flex items-start text-sm mt-1 text-gray-500 cursor-pointer"
       >
-        View all comments
+        View {comment?.length} comments
       </span>
       <div className="flex items-start">
         <CommentDialog open={open} setOpen={setOpen} />
@@ -201,7 +232,7 @@ function Post({ post }) {
         />
         {text && (
           <span
-            onClick={sendMessageHandler}
+            onClick={commentHandler}
             className="text-[#3BADF8] text-sm font-semibold cursor-pointer"
           >
             Post
