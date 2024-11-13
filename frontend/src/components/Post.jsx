@@ -15,7 +15,7 @@ import CommentDialog from "./CommentDialog";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import axios from "axios";
-import { setPosts } from "@/redux/postSlice";
+import { setPosts, setSelectedPost } from "@/redux/postSlice";
 
 function Post({ post }) {
   const [text, setText] = useState("");
@@ -196,7 +196,10 @@ function Post({ post }) {
           )}
 
           <MessageCircle
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              dispatch(setSelectedPost(post));
+              setOpen(true);
+            }}
             className="hover:text-gray-400"
           />
           <Send className="hover:text-gray-400" />
@@ -214,7 +217,10 @@ function Post({ post }) {
         <span className="inline w-full ml-1"> {post.caption}</span>
       </div>
       <span
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          dispatch(setSelectedPost(post));
+          setOpen(true);
+        }}
         className=" flex items-start text-sm mt-1 text-gray-500 cursor-pointer"
       >
         View {comment?.length} comments
