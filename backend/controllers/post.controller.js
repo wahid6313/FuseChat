@@ -62,7 +62,7 @@ export const getAllPost = async (req, res) => {
       .sort({ createdAt: -1 })
       .populate({ path: "author", select: "userName profilePicture" })
       .populate({
-        path: "comment",
+        path: "comments",
         sort: { createdAt: -1 },
         populate: {
           path: "author",
@@ -89,7 +89,7 @@ export const getUserPost = async (req, res) => {
         select: "userName profilePicture",
       })
       .populate({
-        path: "comment",
+        path: "comments",
         sort: { createdAt: -1 },
         populate: {
           path: "author",

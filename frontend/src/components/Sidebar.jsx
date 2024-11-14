@@ -72,7 +72,7 @@ function Sidebar() {
   ];
 
   return (
-    <div className="fixed top-0 z-10 left-0 px-3 border-r border-gray-300 w-[245px] h-screen flex flex-col justify-between">
+    <div className="fixed top-0 left-0 px-3 border-r border-gray-300 w-[245px] h-screen flex flex-col justify-between z-10">
       {/* Header Section */}
       <div>
         <h1 className="flex flex-row w-20 cursor-pointer items-center mt-3">

@@ -29,6 +29,15 @@ function RightSidebar() {
         </div>
       </div>
       <SuggestedUsers />
+      <div className=" text-xs mt-12 text-gray-300 cursor-pointer">
+        <p className="">
+          About . Help . Press . API . Jobs . Privacy . Terms .
+        </p>
+        <p>Locations . Language . Meta . Verified</p>
+      </div>
+      <div className="text-xs text-gray-300 mt-6">
+        <p>@ 2024 FUSECHAT</p>
+      </div>
     </div>
   );
 }

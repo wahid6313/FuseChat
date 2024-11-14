@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import axios from "axios";
 import { setPosts, setSelectedPost } from "@/redux/postSlice";
+import { Link } from "react-router-dom";
 
 function Post({ post }) {
   const [text, setText] = useState("");
@@ -132,12 +133,15 @@ function Post({ post }) {
       {/* post header ----------------------------------------------------------------- */}
       <div className=" items-center justify-between">
         <div className=" flex items-center text-center justify-start gap-2 pt-4 pb-3 ">
-          <Avatar className="cursor-pointer ">
-            <AvatarImage alt="post-image" src={profilePicture}></AvatarImage>
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-
-          <h1 className="cursor-pointer font-semibold">{userName}</h1>
+          <Link to={`/profile/${post?._id}`}>
+            <Avatar className="cursor-pointer ">
+              <AvatarImage alt="post-image" src={profilePicture}></AvatarImage>
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </Link>
+          <Link to={`/profile/${post?._id}`}>
+            <h1 className="cursor-pointer font-semibold">{userName}</h1>
+          </Link>
 
           <div className="flex justify-end items-center text-center ml-[220px] ">
             <Dialog>
