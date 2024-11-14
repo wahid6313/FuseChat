@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "@/redux/authSlice";
 import CreatePost from "./CreatePost.jsx";
@@ -44,6 +44,8 @@ function Sidebar() {
       setOpen(true);
     } else if (textType === "Profile") {
       navigate(`/profile/${user?._id}`);
+    } else if (textType === "Home") {
+      navigate("/");
     }
   };
 
@@ -75,14 +77,16 @@ function Sidebar() {
     <div className="fixed top-0 left-0 px-3 border-r border-gray-300 w-[245px] h-screen flex flex-col justify-between z-10">
       {/* Header Section */}
       <div>
-        <h1 className="flex flex-row w-20 cursor-pointer items-center mt-3">
-          <img
-            alt=""
-            src="https://t4.ftcdn.net/jpg/03/02/16/77/360_F_302167753_zO96cQJziw0BYKOSw0plniVSlkxdGTC5.jpg"
-            className="mr-2"
-          />
-          <span className="text-xl font-semibold">FuseChat</span>
-        </h1>
+        <Link>
+          <h1 className="flex flex-row w-20 cursor-pointer items-center mt-3">
+            <img
+              alt=""
+              src="https://t4.ftcdn.net/jpg/03/02/16/77/360_F_302167753_zO96cQJziw0BYKOSw0plniVSlkxdGTC5.jpg"
+              className="mr-2"
+            />
+            <span className="text-xl font-semibold">FuseChat</span>
+          </h1>
+        </Link>
 
         {/* Main Sidebar Items */}
         <div>
