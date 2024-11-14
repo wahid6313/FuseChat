@@ -204,10 +204,12 @@ export const getCommentOfPost = async (req, res) => {
   try {
     const postId = req.params.id;
 
-    const comments = await Comment.find({ post: postId }).populate(
-      "author",
-      "userName profilePicture"
-    );
+    const comments = await Comment.find({ post: postId });
+
+    await comments.populate({
+      path: "author",
+      select: "userName profilePicture",
+    });
 
     if (!comments) {
       return res.status(404).json({

@@ -136,7 +136,9 @@ function Post({ post }) {
             <AvatarImage alt="post-image" src={profilePicture}></AvatarImage>
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
+
           <h1 className="cursor-pointer font-semibold">{userName}</h1>
+
           <div className="flex justify-end items-center text-center ml-[220px] ">
             <Dialog>
               <DialogTrigger asChild>
