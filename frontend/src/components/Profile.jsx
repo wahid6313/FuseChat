@@ -160,19 +160,7 @@ function Profile() {
                   @{userProfile?.userName}
                 </Badge>
                 <p className="text-sm cursor-pointer mt-3">
-                  {userProfile?.bio || "bio here..."}🚀
-                </p>
-                <p className="text-sm cursor-pointer">
-                  Trusting someone feels like a hatred🖕
-                </p>
-                <p className="text-sm cursor-pointer">
-                  Respect is earned, not given
-                </p>
-                <p className="text-sm cursor-pointer">
-                  Success isn’t a goal, it’s a lifestyle 🚀
-                </p>
-                <p className="text-sm cursor-pointer">
-                  Focus is my superpower 🪫
+                  {userProfile?.bio || "bio here..."}
                 </p>
               </div>
             </div>
