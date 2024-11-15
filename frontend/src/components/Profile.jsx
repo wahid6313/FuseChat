@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import useGetUserProfile from "../hooks/useGetUserProfile.jsx";
 import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar.jsx";
@@ -24,13 +24,13 @@ function Profile() {
 
   const [activeTab, setActiveTab] = useState("posts");
 
-  const { userProfile } = useSelector((store) => store.auth);
+  const { userProfile, user } = useSelector((store) => store.auth);
   useEffect(() => {
     if (userProfile) {
       console.log(userProfile);
     }
   }, [userProfile]);
-  const isLoggedInUserProfile = true;
+  const isLoggedInUserProfile = user?._id === userProfile?._id;
   const isFollowing = false;
 
   const handleTabChange = (tab) => {
@@ -63,9 +63,12 @@ function Profile() {
                 </span>
                 {isLoggedInUserProfile ? (
                   <>
-                    <Button className="bg-gray-100 text-black h-8 ml-3 rounded-lg hover:bg-gray-200 font-semibold">
-                      Edit profile
-                    </Button>
+                    <Link to="/account/edit">
+                      <Button className="bg-gray-100 text-black h-8 ml-3 rounded-lg hover:bg-gray-200 font-semibold">
+                        Edit profile
+                      </Button>
+                    </Link>
+
                     <Button className="bg-gray-100 text-black h-8 ml-2 rounded-lg hover:bg-gray-200 font-semibold">
                       View archive
                     </Button>
