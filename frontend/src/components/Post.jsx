@@ -129,8 +129,9 @@ function Post({ post }) {
   };
 
   return (
-    <div className="mt-1 w-full items-start max-w-sm mx-auto ">
+    <div className="mt-1 w-full items-start max-w-sm mx-auto">
       {/* post header ----------------------------------------------------------------- */}
+
       <div className=" items-center justify-between">
         <div className=" flex items-center text-center justify-start gap-2 pt-4 pb-3 ">
           <Link to={`/profile/${post?._id}`}>
@@ -175,7 +176,6 @@ function Post({ post }) {
           </div>
         </div>
       </div>
-
       {/* post image-------------------------------------------------------------------- */}
       <div className="">
         <img
@@ -184,7 +184,6 @@ function Post({ post }) {
           src={post.image}
         />
       </div>
-
       {/* post likes , comments , share ------------------------------------------------------------- */}
       <div className="flex items-center justify-between">
         <div className="flex gap-4 items-center text-center mt-1 cursor-pointer ">

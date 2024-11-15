@@ -11,7 +11,7 @@ function RightSidebar() {
     <div className="w-[410px] h-screen  ">
       <div className="flex items-center  mt-10">
         <Link to={`/profile/${user?._id}`}>
-          <Avatar>
+          <Avatar className="ring-2 ring-offset-2 ring-gray-200">
             <AvatarImage src={user?.profilePicture} alt="auth-image" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
