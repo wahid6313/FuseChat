@@ -6,6 +6,7 @@ import Home from "./components/Home";
 import Profile from "./components/Profile";
 import EditProfile from "./components/EditProfile";
 import ChatPage from "./components/ChatPage";
+import EmptyMessage from "./components/EmptyMessage";
 
 const browserRouter = createBrowserRouter([
   {

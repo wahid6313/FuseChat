@@ -1,48 +1,58 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { FilePenLine } from "lucide-react";
-import SuggestedUsers from "./SuggestedUsers";
+// import { CircleUserRound} from "lucide-react";
+
+import { setSelectedUser } from "@/redux/authSlice";
+import { CircleUserRound, FilePenLine } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
 
 function ChatPage() {
-  const { user, suggestedUser } = useSelector((store) => store.auth);
+  const { user, suggestedUser, selectedUser } = useSelector(
+    (store) => store.auth
+  );
+
+  const dispatch = useDispatch();
+  const isOnline = false;
 
   return (
-    <div className="w-[350px]  ml-[244px] overflow-hidden h-screen border border-r border-gray-300">
-      <section className=" mt-10 ">
-        <div className="flex items-center justify-between px-6">
-          <h1 className="font-semibold text-xl cursor-pointer">
-            {user?.userName}{" "}
-          </h1>
-          <FilePenLine className="cursor-pointer" />
-        </div>
+    <div className="ml-[244px] h-[100vh] grid grid-cols-[30%_70%] overflow-y-hidden">
+      <div className="flex-col sticky top-0 ">
+        <section className=" w-full sticky top-0 z-10 bg-white">
+          <div className="flex px-6 items-center justify-between mt-10">
+            <h1 className="font-semibold text-xl cursor-pointer">
+              {user?.userName}{" "}
+            </h1>
+            <FilePenLine className="cursor-pointer" />
+          </div>
 
-        <div className=" mt-8 flex items-center justify-between px-6">
-          <Avatar className="w-20 h-20 cursor-pointer">
-            <AvatarImage src={user?.profilePicture} />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-        </div>
-        <div>
-          <p className="text-xs ml-3 text-gray-500 px-6">Your note</p>
-        </div>
-        <div className="flex items-center justify-between px-6 mt-6">
-          <p className="font-semibold">Messages</p>
-          <p className="text-gray-500 text-sm font-semibold cursor-pointer">
-            Requests
-          </p>
-        </div>
-        <div className="mt-3">
-          {suggestedUser.map((user) => {
-            return (
+          <div className=" mt-8 flex items-center px-6 ">
+            <Avatar className="w-[75px] h-[75px] cursor-pointer">
+              <AvatarImage src={user?.profilePicture} />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </div>
+          <div>
+            <p className="text-xs ml-3 text-gray-500 px-6">Your note</p>
+          </div>
+          <div className="flex items-center justify-between mt-6 px-6">
+            <p className="font-semibold">Messages</p>
+            <p className="text-gray-500 text-sm font-semibold cursor-pointer">
+              Requests
+            </p>
+          </div>
+        </section>
+        <div className="mt-3 overflow-y-auto h-[80vh]">
+          {Array.isArray(suggestedUser) && suggestedUser.length > 0 ? (
+            suggestedUser.map((user) => (
               <div
-                key={user}
-                className="flex items-center justify-between px-6 py-3  hover:bg-gray-100 cursor-pointer"
+                key={user?._id || user}
+                className="flex items-center justify-between px-6 hover:bg-gray-100 cursor-pointer py-2 overflow-y-auto flex-1"
               >
-                <div className="flex items-center  w-full">
+                <div className="flex items-center justify-between ">
                   <Link to={`/profile/${user?._id}`}>
-                    <Avatar className="h-12 w-12">
+                    <Avatar className="w-[50px] h-[50px]">
                       <AvatarImage
                         src={user?.profilePicture}
                         alt="auth-image"
@@ -55,14 +65,43 @@ function ChatPage() {
                     <h1 className="text-sm font-semibold">{user?.userName}</h1>
                   </Link>
                 </div>
-                <p className=" ml-auto text-xs font-semibold text-blue-500 cursor-pointer hover:text-black">
-                  online
-                </p>
+                <div
+                  className={`text-xs font-semibold text-blue-500 cursor-pointer items-center ${
+                    isOnline ? "text-green-400" : "text-red-600"
+                  }`}
+                >
+                  {isOnline ? "online" : "offline"}
+                </div>
               </div>
-            );
-          })}
+            ))
+          ) : (
+            <p className="text-sm text-gray-500 mt-4">
+              No suggestions available.
+            </p>
+          )}
         </div>
-      </section>
+      </div>
+      {selectedUser ? (
+        <section
+          className=" flex-1 border-l border-l-gray-300 flex flex-col h-full w-[60%] fixed
+        "
+        >
+          <h1>wahid ali</h1>
+        </section>
+      ) : (
+        <div className="flex items-center justify-center border border-l-gray-300 h-screen">
+          <div className="text-center  flex flex-col items-center">
+            <CircleUserRound strokeWidth={0.5} className="w-28 h-28" />
+            <p className="font-semibold text-lg">Your messages</p>
+            <p className="mt-[-8px] text-sm text-gray-500">
+              Send a message to start a chat.
+            </p>
+            <Button className="bg-blue-400 w-fit h-8 ml-3 text-sm font-semibold hover:bg-blue-500 mt-3 rounded-lg">
+              Send message
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
