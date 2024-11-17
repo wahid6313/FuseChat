@@ -21,6 +21,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   auth: authSlice,
   post: postSlice,
+  // message: messageSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
