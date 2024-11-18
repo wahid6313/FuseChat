@@ -4,9 +4,22 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 // import { CircleUserRound} from "lucide-react";
 
 import { setSelectedUser } from "@/redux/authSlice";
-import { ChevronDown, CircleUserRound, FilePenLine } from "lucide-react";
+import {
+  ChevronDown,
+  CircleUserRound,
+  FilePenLine,
+  Heart,
+  Image,
+  Info,
+  Mic,
+  Phone,
+  Smile,
+  Video,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import Messages from "./Messages";
 
 function ChatPage() {
   const { user, suggestedUser, selectedUser } = useSelector(
@@ -47,6 +60,7 @@ function ChatPage() {
           {Array.isArray(suggestedUser) && suggestedUser.length > 0 ? (
             suggestedUser.map((user) => (
               <div
+                onClick={() => dispatch(setSelectedUser(user))}
                 key={user?._id || user}
                 className="flex items-center justify-between px-6 hover:bg-gray-100 cursor-pointer py-2 overflow-y-auto flex-1"
               >
@@ -76,14 +90,41 @@ function ChatPage() {
       </div>
       {selectedUser ? (
         <section
-          className=" flex-1 border-l border-l-gray-300 flex flex-col h-full w-[60%]
+          className=" flex-1 border-l border-l-gray-300 flex flex-col h-screen 
         "
         >
-          <div>
-            <Avatar>
-              <AvatarImage src={selectedUser?.profilePicture} />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
+          <div className="flex items-center justify-between sticky top-0 bg-white z-10 w-full px-5 py-4 border border-b-gray-300">
+            <div className="flex items-center">
+              <Avatar className="w-12 h-12 cursor-pointer">
+                <AvatarImage src={selectedUser?.profilePicture} />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+
+              <span className="font-semibold ml-1 cursor-pointer">
+                {selectedUser?.userName}
+              </span>
+            </div>
+            <div className="flex items-center cursor-pointer chat-navbar">
+              <Phone className="h-6 w-6" />
+              <Video strokeWidth={1.7} className="h-7 w-7" />
+              <Info className="h-6 w-6" />
+            </div>
+          </div>
+
+          <Messages selectedUser={selectedUser} />
+          <div className="px-5 relative w-full   py-4">
+            <Smile
+              strokeWidth={1.9}
+              className="absolute left-7 top-1/2 transform -translate-y-1/2 ml-2 cursor-pointer"
+            />
+            <Input
+              type="text"
+              className="focus-visible:ring-transparent  flex-1 mr-2 rounded-full py-6 px-12 border border-gray-300"
+              placeholder="Message..."
+            ></Input>
+            <Mic className="absolute right-[107px] top-1/2 transform -translate-y-1/2 ml-2 cursor-pointer" />
+            <Image className="absolute right-[75px] top-1/2 transform -translate-y-1/2 ml-2 cursor-pointer" />
+            <Heart className="absolute right-10 top-1/2 transform -translate-y-1/2 ml-2 cursor-pointer" />
           </div>
         </section>
       ) : (
