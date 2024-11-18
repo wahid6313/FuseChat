@@ -1,15 +1,30 @@
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
 
 function Messages({ selectedUser }) {
   return (
-    <div className="overflow-y-auto p-4 h-full">
-      <div className="flex justify-center">
-        <Avatar className="h-7 w-7">
-          <AvatarImage src={selectedUser?.profilePicture} alt="profile" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+    <div className="overflow-y-auto p-12 h-full ">
+      <div className="flex  justify-center items-center px-5 ">
+        <div className="flex flex-col justify-center items-center  ">
+          <Avatar className="h-24 w-24">
+            <AvatarImage src={selectedUser?.profilePicture} alt="profile" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+
+          <span className="font-semibold text-lg">
+            {selectedUser?.userName}
+          </span>
+          <span className="mt-[-11px] text-xs text-gray-500">FuseChat</span>
+          <Link to={`/profile/${selectedUser?._id}`}>
+            <Button className="bg-gray-100 text-black h-8 mt-3 rounded-lg hover:bg-gray-200 font-semibold">
+              View profile
+            </Button>
+          </Link>
+        </div>
       </div>
+      <div></div>
     </div>
   );
 }
