@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 // import { CircleUserRound} from "lucide-react";
 
 import { setSelectedUser } from "@/redux/authSlice";
-import { CircleUserRound, FilePenLine } from "lucide-react";
+import { ChevronDown, CircleUserRound, FilePenLine } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 
@@ -14,15 +14,15 @@ function ChatPage() {
   );
 
   const dispatch = useDispatch();
-  const isOnline = false;
+  const isOnline = true;
 
   return (
     <div className="ml-[244px] h-[100vh] grid grid-cols-[30%_70%] overflow-y-hidden">
       <div className="flex-col sticky top-0 ">
         <section className=" w-full sticky top-0 z-10 bg-white">
-          <div className="flex px-6 items-center justify-between mt-10">
+          <div className="flex px-6  items-center justify-between mt-10">
             <h1 className="font-semibold text-xl cursor-pointer">
-              {user?.userName}{" "}
+              {user?.userName}
             </h1>
             <FilePenLine className="cursor-pointer" />
           </div>
@@ -34,7 +34,7 @@ function ChatPage() {
             </Avatar>
           </div>
           <div>
-            <p className="text-xs ml-3 text-gray-500 px-6">Your note</p>
+            <p className="text-xs ml-[10px] text-gray-500 px-6">Your note</p>
           </div>
           <div className="flex items-center justify-between mt-6 px-6">
             <p className="font-semibold">Messages</p>
@@ -51,19 +51,12 @@ function ChatPage() {
                 className="flex items-center justify-between px-6 hover:bg-gray-100 cursor-pointer py-2 overflow-y-auto flex-1"
               >
                 <div className="flex items-center justify-between ">
-                  <Link to={`/profile/${user?._id}`}>
-                    <Avatar className="w-[50px] h-[50px]">
-                      <AvatarImage
-                        src={user?.profilePicture}
-                        alt="auth-image"
-                      />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                  </Link>
+                  <Avatar className="w-[50px] h-[50px]">
+                    <AvatarImage src={user?.profilePicture} alt="auth-image" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
 
-                  <Link to={`/profile/${user?._id}`}>
-                    <h1 className="text-sm font-semibold">{user?.userName}</h1>
-                  </Link>
+                  <h1 className="text-sm font-semibold">{user?.userName}</h1>
                 </div>
                 <div
                   className={`text-xs font-semibold text-blue-500 cursor-pointer items-center ${
@@ -83,10 +76,15 @@ function ChatPage() {
       </div>
       {selectedUser ? (
         <section
-          className=" flex-1 border-l border-l-gray-300 flex flex-col h-full w-[60%] fixed
+          className=" flex-1 border-l border-l-gray-300 flex flex-col h-full w-[60%]
         "
         >
-          <h1>wahid ali</h1>
+          <div>
+            <Avatar>
+              <AvatarImage src={selectedUser?.profilePicture} />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </div>
         </section>
       ) : (
         <div className="flex items-center justify-center border border-l-gray-300 h-screen">
