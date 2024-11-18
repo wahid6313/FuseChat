@@ -5,8 +5,8 @@ import { Button } from "./ui/button";
 
 function Messages({ selectedUser }) {
   return (
-    <div className="overflow-y-auto p-12 h-full ">
-      <div className="flex  justify-center items-center px-5 ">
+    <div className="overflow-y-auto p-6 h-full bg-red-200">
+      <div className="flex  justify-center items-center  bg-cyan-300 mt-8">
         <div className="flex flex-col justify-center items-center  ">
           <Avatar className="h-24 w-24">
             <AvatarImage src={selectedUser?.profilePicture} alt="profile" />
@@ -24,7 +24,15 @@ function Messages({ selectedUser }) {
           </Link>
         </div>
       </div>
-      <div></div>
+      <div className="bg-blue-400">
+        {[1, 2, 3, 4].map((msg) => {
+          return (
+            <div className={`flex`}>
+              <div>{msg}</div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

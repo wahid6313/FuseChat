@@ -7,10 +7,9 @@ import userRoute from "./routes/user.routes.js";
 import postRoute from "./routes/post.route.js";
 import messageRoute from "./routes/message.route.js";
 import path from "path";
+import { app, server } from "./socket/socket.js";
 
 dotenv.config({});
-
-const app = express();
 
 const PORT = process.env.PORT || 3000;
 
@@ -40,7 +39,7 @@ app.use("/api/v1/user", userRoute);
 app.use("/api/v1/post", postRoute);
 app.use("/api/v1/message", messageRoute);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   connectDB();
   console.log(`app is running on ${PORT}`);
 });
