@@ -4,7 +4,7 @@ import cloudinary from "../utils/cloudinary.js";
 import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
 import Comment from "../models/comment.model.js";
-import { getReceiverSocketId } from "../socket/socket.js";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 
 export const addNewPost = async (req, res) => {
   try {
@@ -128,7 +128,7 @@ export const likePost = async (req, res) => {
     const user = await User.findById(likeKarneWalaUserId).select(
       "userName profiePicture"
     );
-    const postOwnerId = Post.author.toString();
+    const postOwnerId = post.author.toString();
     if (postOwnerId != likeKarneWalaUserId) {
       //emit a notification events
       const notification = {
@@ -171,7 +171,7 @@ export const disLikePost = async (req, res) => {
     const user = await User.findById(disLikeKarneWalaUserId).select(
       "userName profiePicture"
     );
-    const postOwnerId = Post.author.toString();
+    const postOwnerId = post.author.toString();
     if (postOwnerId != disLikeKarneWalaUserId) {
       //emit a notification events
       const notification = {
