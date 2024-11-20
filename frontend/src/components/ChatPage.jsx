@@ -126,7 +126,7 @@ function ChatPage() {
 
       {/* Chat Section */}
       {selectedUser ? (
-        <section className="flex-1 border-l border-l-gray-300 flex flex-col h-screen">
+        <section className="flex-1 border-l border-l-gray-300 flex flex-col h-screen ">
           <div className="flex items-center justify-between sticky top-0 bg-white z-10 w-full px-5 py-4 border border-b-gray-300">
             <div className="flex items-center">
               <Avatar className="w-12 h-12 cursor-pointer">
