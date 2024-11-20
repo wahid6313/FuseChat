@@ -41,7 +41,7 @@ function CreatePost({ open, setOpen }) {
       setLoading(true);
       // const token = localStorage.getItem("authToken");
       const res = await axios.post(
-        "http://localhost:8000/api/v1/post/addpost",
+        "https://fusechat.onrender.com/api/v1/post/addpost",
         formData,
         {
           headers: {

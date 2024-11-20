@@ -25,9 +25,12 @@ function Sidebar() {
   const [open, setOpen] = useState(false);
   const logoutHandler = async () => {
     try {
-      const res = await axios("http://localhost:8000/api/v1/user/logOut", {
-        withCredentials: true,
-      });
+      const res = await axios(
+        "https://fusechat.onrender.com/api/v1/user/logOut",
+        {
+          withCredentials: true,
+        }
+      );
       if (res.data.success) {
         dispatch(setAuthUser(null));
         navigate("/login");
