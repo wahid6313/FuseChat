@@ -12,27 +12,48 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSocketId, clearSocket } from "./redux/socketSlice";
 
 import { setOnlineUsers } from "./redux/chatSlice";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const browserRouter = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
+    element: (
+      <ProtectedRoute>
+        <MainLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: (
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/profile/:id",
-        element: <Profile />,
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/account/edit",
-        element: <EditProfile />,
+        element: (
+          <ProtectedRoute>
+            <EditProfile />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/chat",
-        element: <ChatPage />,
+        element: (
+          <ProtectedRoute>
+            <ChatPage />
+          </ProtectedRoute>
+        ),
       },
     ],
   },

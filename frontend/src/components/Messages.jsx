@@ -4,13 +4,15 @@ import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { useSelector } from "react-redux";
 import useGetAllMessages from "@/hooks/useGetAllMessages";
+import useGetRTM from "@/hooks/useGetRTM";
 
 function Messages({ selectedUser }) {
+  useGetRTM();
   useGetAllMessages();
   const { messages } = useSelector((store) => store.chat);
   const { user } = useSelector((store) => store.auth);
   return (
-    <div className="overflow-y-auto p-6 h-full ">
+    <div className="overflow-y-auto p-6 py-12  h-full ">
       <div className="flex  justify-center items-center   mt-8">
         <div className="flex flex-col justify-center items-center  ">
           <Avatar className="h-24 w-24">

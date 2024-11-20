@@ -149,16 +149,29 @@ function ChatPage() {
             <Input
               value={textMessage}
               onChange={(e) => setTextMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && textMessage.trim()) {
+                  sendMessageHandler(selectedUser?._id);
+                }
+              }}
               type="text"
               className="focus-visible:ring-transparent flex-1 mr-2 rounded-full py-6 px-12 border border-gray-300"
               placeholder="Message..."
             />
-            <Button onClick={() => sendMessageHandler(selectedUser?._id)}>
-              send
-            </Button>
-            <Mic className="absolute right-[107px] top-1/2 transform -translate-y-1/2 ml-2 cursor-pointer" />
-            <Image className="absolute right-[75px] top-1/2 transform -translate-y-1/2 ml-2 cursor-pointer" />
-            <Heart className="absolute right-10 top-1/2 transform -translate-y-1/2 ml-2 cursor-pointer" />
+            {textMessage ? (
+              <span
+                onClick={() => sendMessageHandler(selectedUser?._id)}
+                className="text-blue-500 text-sm font-semibold cursor-pointer hover:text-black absolute top-1/2 transform -translate-y-1/2 ml-2 right-[40px]"
+              >
+                Send
+              </span>
+            ) : (
+              <>
+                <Mic className="absolute right-[107px] top-1/2 transform -translate-y-1/2 ml-2 cursor-pointer" />
+                <Image className="absolute right-[75px] top-1/2 transform -translate-y-1/2 ml-2 cursor-pointer" />
+                <Heart className="absolute right-10 top-1/2 transform -translate-y-1/2 ml-2 cursor-pointer" />
+              </>
+            )}
           </div>
         </section>
       ) : (

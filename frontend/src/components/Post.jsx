@@ -115,6 +115,21 @@ function Post({ post }) {
     }
   };
 
+  const bookmarkHandler = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8000/api/v1/post/${post?._id}/bookmark`,
+        { withCredentials: true }
+      );
+      if (res.data.success) {
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
+
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
     if (inputText.trim()) {
@@ -150,12 +165,15 @@ function Post({ post }) {
                 <MoreHorizontal className="cursor-pointer ml-2 justify-end"></MoreHorizontal>
               </DialogTrigger>
               <DialogContent className="w-60">
-                <Button
-                  variant="ghost"
-                  className="bg-white text-blue-600 border border-none  w-full"
-                >
-                  Unfollow
-                </Button>
+                {user && post.author[0] && user._id != post.author[0]._id && (
+                  <Button
+                    variant="ghost"
+                    className="bg-white text-blue-600 border border-none  w-full"
+                  >
+                    Unfollow
+                  </Button>
+                )}
+
                 <Button
                   variant="ghost"
                   className="bg-white text-blue-600 border border-none  w-full"
@@ -210,7 +228,10 @@ function Post({ post }) {
           <Send className="hover:text-gray-400" />
         </div>
 
-        <Bookmark className="hover:text-gray-400" />
+        <Bookmark
+          onClick={bookmarkHandler}
+          className="hover:text-gray-400 cursor-pointer"
+        />
       </div>
       <div className=" flex items-start">
         <span className="font-semibold text-sm mt-3 cursor-pointer">
