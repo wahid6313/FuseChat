@@ -20,7 +20,7 @@ import axios from "axios";
 import { setMessages } from "@/redux/chatSlice";
 
 function ChatPage() {
-  const [textMesaage, setTextMessage] = useState("");
+  const [textMessage, setTextMessage] = useState("");
   const { user, suggestedUser, selectedUser } = useSelector(
     (store) => store.auth
   );
@@ -43,7 +43,7 @@ function ChatPage() {
     try {
       const res = await axios.post(
         `http://localhost:8000/api/v1/message/send/${receiverId}`,
-        { textMesaage },
+        { textMessage },
         {
           headers: {
             "Content-Type": "application/json",
@@ -147,7 +147,7 @@ function ChatPage() {
           <div className="px-5 relative w-full py-4">
             <Smile className="absolute left-7 top-1/2 transform -translate-y-1/2 ml-2 cursor-pointer" />
             <Input
-              value={textMesaage}
+              value={textMessage}
               onChange={(e) => setTextMessage(e.target.value)}
               type="text"
               className="focus-visible:ring-transparent flex-1 mr-2 rounded-full py-6 px-12 border border-gray-300"

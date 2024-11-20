@@ -3,12 +3,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { useSelector } from "react-redux";
+import useGetAllMessages from "@/hooks/useGetAllMessages";
 
 function Messages({ selectedUser }) {
+  useGetAllMessages();
   const { messages } = useSelector((store) => store.chat);
+  const { user } = useSelector((store) => store.auth);
   return (
-    <div className="overflow-y-auto p-6 h-full bg-red-200">
-      <div className="flex  justify-center items-center  bg-cyan-300 mt-8">
+    <div className="overflow-y-auto p-6 h-full ">
+      <div className="flex  justify-center items-center   mt-8">
         <div className="flex flex-col justify-center items-center  ">
           <Avatar className="h-24 w-24">
             <AvatarImage src={selectedUser?.profilePicture} alt="profile" />
@@ -26,14 +29,28 @@ function Messages({ selectedUser }) {
           </Link>
         </div>
       </div>
-      <div className="bg-blue-400">
-        {messages.map((msg) => {
-          return (
-            <div className={`flex`} key={msg}>
-              <div>{msg}</div>
-            </div>
-          );
-        })}
+      <div className="flex flex-col mt-[100px]">
+        {messages &&
+          messages.map((msg) => {
+            return (
+              <div
+                className={`flex ${
+                  msg.senderId === user?._id ? "justify-end" : "justify-start"
+                }`}
+                key={msg}
+              >
+                <div
+                  className={` py-2 px-4 max-w-sm rounded-full ${
+                    msg.senderId === user?._id
+                      ? "bg-blue-500 text-white font-light text-sm"
+                      : "bg-gray-200 text-black font-light text-sm"
+                  }`}
+                >
+                  {msg.message}
+                </div>
+              </div>
+            );
+          })}
       </div>
     </div>
   );
