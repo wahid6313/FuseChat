@@ -9,8 +9,9 @@ import ChatPage from "./components/ChatPage";
 import { io } from "socket.io-client";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import store from "./redux/store";
-import { setSocket } from "./redux/socketSlice";
+import { setSocketId, clearSocket } from "./redux/socketSlice";
+
+import { setOnlineUsers } from "./redux/chatSlice";
 
 const browserRouter = createBrowserRouter([
   {
@@ -47,7 +48,9 @@ const browserRouter = createBrowserRouter([
 
 function App() {
   const { user } = useSelector((store) => store.auth);
+  const { socketId, status } = useSelector((store) => store.socketio);
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (user) {
       const socketio = io("http://localhost:8000", {
@@ -56,14 +59,23 @@ function App() {
         },
         transports: ["websocket"],
       });
-      dispatch(setSocket(socketio));
 
-      //listening all tha events------------------
+      // Dispatch only the socket ID and status, not the entire socket object
+      dispatch(setSocketId({ socketId: socketio.id, status: "connected" }));
+
       socketio.on("getOnlineUsers", (onlineUsers) => {
-        dispatch();
+        dispatch(setOnlineUsers(onlineUsers));
       });
+
+      return () => {
+        socketio.close();
+        dispatch(clearSocket());
+      };
+    } else if (socketId) {
+      // Clean up socket if user is logged out
+      dispatch(clearSocket());
     }
-  }, []);
+  }, [user, dispatch, socketId]);
 
   return (
     <div>

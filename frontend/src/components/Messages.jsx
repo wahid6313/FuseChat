@@ -2,8 +2,10 @@ import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
+import { useSelector } from "react-redux";
 
 function Messages({ selectedUser }) {
+  const { messages } = useSelector((store) => store.chat);
   return (
     <div className="overflow-y-auto p-6 h-full bg-red-200">
       <div className="flex  justify-center items-center  bg-cyan-300 mt-8">
@@ -25,9 +27,9 @@ function Messages({ selectedUser }) {
         </div>
       </div>
       <div className="bg-blue-400">
-        {[1, 2, 3, 4].map((msg) => {
+        {messages.map((msg) => {
           return (
-            <div className={`flex`}>
+            <div className={`flex`} key={msg}>
               <div>{msg}</div>
             </div>
           );

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { setSelectedUser } from "@/redux/authSlice";
@@ -16,13 +16,17 @@ import {
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import Messages from "./Messages";
+import axios from "axios";
+import { setMessages } from "@/redux/chatSlice";
 
 function ChatPage() {
+  const [textMesaage, setTextMessage] = useState("");
   const { user, suggestedUser, selectedUser } = useSelector(
     (store) => store.auth
   );
+  const { onlineUsers, messages } = useSelector((store) => store.chat);
   const dispatch = useDispatch();
-  const isOnline = true;
+  // const isOnline = true;
 
   // Reset selectedUser when navigating away from ChatPage
   useEffect(() => {
@@ -35,6 +39,26 @@ function ChatPage() {
     // Toggle selected user
     dispatch(setSelectedUser(selectedUser?._id === user?._id ? null : user));
   }
+  const sendMessageHandler = async (receiverId) => {
+    try {
+      const res = await axios.post(
+        `http://localhost:8000/api/v1/message/send/${receiverId}`,
+        { textMesaage },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      if (res.data.success) {
+        dispatch(setMessages([...messages, res.data.newMessage]));
+        setTextMessage("");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="ml-[244px] h-[100vh] grid grid-cols-[30%_70%] overflow-y-hidden">
@@ -64,28 +88,34 @@ function ChatPage() {
         </section>
         <div className="mt-3 overflow-y-auto h-[80vh]">
           {Array.isArray(suggestedUser) && suggestedUser.length > 0 ? (
-            suggestedUser.map((user) => (
-              <div
-                onClick={() => handleSelection(user)}
-                key={user?._id || user}
-                className="flex items-center justify-between px-6 hover:bg-gray-100 cursor-pointer py-2"
-              >
-                <div className="flex items-center justify-between">
-                  <Avatar className="w-[50px] h-[50px]">
-                    <AvatarImage src={user?.profilePicture} alt="auth-image" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  <h1 className="text-sm font-semibold">{user?.userName}</h1>
-                </div>
+            suggestedUser.map((user) => {
+              const isOnline = onlineUsers.includes(suggestedUser?._id);
+              return (
                 <div
-                  className={`text-xs font-semibold cursor-pointer ${
-                    isOnline ? "text-green-400" : "text-red-600"
-                  }`}
+                  onClick={() => handleSelection(user)}
+                  key={user?._id || user}
+                  className="flex items-center justify-between px-6 hover:bg-gray-100 cursor-pointer py-2"
                 >
-                  {isOnline ? "online" : "offline"}
+                  <div className="flex items-center justify-between">
+                    <Avatar className="w-[50px] h-[50px]">
+                      <AvatarImage
+                        src={user?.profilePicture}
+                        alt="auth-image"
+                      />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    <h1 className="text-sm font-semibold">{user?.userName}</h1>
+                  </div>
+                  <div
+                    className={`text-xs font-semibold cursor-pointer ${
+                      isOnline ? "text-green-400" : "text-red-600"
+                    }`}
+                  >
+                    {isOnline ? "online" : "offline"}
+                  </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <p className="text-sm text-gray-500 mt-4">
               No suggestions available.
@@ -117,10 +147,15 @@ function ChatPage() {
           <div className="px-5 relative w-full py-4">
             <Smile className="absolute left-7 top-1/2 transform -translate-y-1/2 ml-2 cursor-pointer" />
             <Input
+              value={textMesaage}
+              onChange={(e) => setTextMessage(e.target.value)}
               type="text"
               className="focus-visible:ring-transparent flex-1 mr-2 rounded-full py-6 px-12 border border-gray-300"
               placeholder="Message..."
             />
+            <Button onClick={() => sendMessageHandler(selectedUser?._id)}>
+              send
+            </Button>
             <Mic className="absolute right-[107px] top-1/2 transform -translate-y-1/2 ml-2 cursor-pointer" />
             <Image className="absolute right-[75px] top-1/2 transform -translate-y-1/2 ml-2 cursor-pointer" />
             <Heart className="absolute right-10 top-1/2 transform -translate-y-1/2 ml-2 cursor-pointer" />
