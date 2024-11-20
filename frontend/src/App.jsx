@@ -1,4 +1,4 @@
-import Signup from "./components/signUp";
+import Signup from "./components/Signup";
 import Login from "./components/Login";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainLayout from "./components/MainLayout";
